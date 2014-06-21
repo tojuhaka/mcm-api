@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='mcm-api',
     version='0.1',
-    packages=['mcm-api'],
+    packages=['mcm_api'],
     include_package_data=True,
     install_requires=[
         'lxml',
