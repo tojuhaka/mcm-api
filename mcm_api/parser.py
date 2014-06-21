@@ -38,10 +38,11 @@ class MCMParser:
         return result
 
     @staticmethod
-    def parse_articles(tree, reputation):
+    def parse_articles(tree, reputation, condition):
         result = []
-        for pr in tree.xpath('article[condition="EX" and \
-                             seller[reputation<={}]]'.format(reputation)):
+        for pr in tree.xpath('article[condition="{}" and \
+                             seller[reputation<={}]]'.format(condition,
+                                                             reputation)):
             if pr.xpath('isAltered/text()="false"') and \
                     pr.xpath('isSigned/text()="false"') and \
                     pr.xpath('isFoil/text()="false"') and \
@@ -100,7 +101,8 @@ class MCMAPI:
 
     def get_article(self, product_id):
         tree = self._get_article_xml(product_id)
-        articles = MCMParser.parse_articles(tree, self.reputation)
+        articles = MCMParser.parse_articles(tree,
+                                            self.reputation, self.condition)
 
         if self.multi:
             return articles
@@ -119,3 +121,23 @@ class MCMAPI:
         result = self.get_article(card['id'])
         self._load_config()
         return result
+
+    def _format_mtgsuomi(self, name, price, expansion, count):
+        return "{}x [card]{}[/card] ({}) {}e\n".format(count, name.title(),
+                                                       expansion, price)
+
+    def generate_file(self, input, output, **kwargs):
+        input_file = open(input, 'r')
+        output_file = open(output, 'w')
+        for line in input_file.readlines():
+            name, expansion, count = line.split('|')
+            count = count.strip()
+            result = self.search_card(name, expansion, **kwargs)
+            print("{}: {}".format(name.title(), result['price']))
+            output_file.write(self._format_mtgsuomi(name,
+                                                    result['price'],
+                                                    expansion,
+                                                    count))
+
+        input_file.close()
+        output_file.close()
