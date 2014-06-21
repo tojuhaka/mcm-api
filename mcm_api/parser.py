@@ -129,15 +129,22 @@ class MCMAPI:
     def generate_file(self, input, output, **kwargs):
         input_file = open(input, 'r')
         output_file = open(output, 'w')
+        cards = []
         for line in input_file.readlines():
             name, expansion, count = line.split('|')
             count = count.strip()
             result = self.search_card(name, expansion, **kwargs)
-            print("{}: {}".format(name.title(), result['price']))
-            output_file.write(self._format_mtgsuomi(name,
-                                                    result['price'],
-                                                    expansion,
-                                                    count))
+            price = float(result['price'])
+            if price < 0.5:
+                price = 0.5
+            print("{}: {}".format(name.title(), price))
+            cards.append((name, price, expansion, count))
+
+        for card in sorted(cards, key=lambda x: x[1], reverse=True):
+            output_file.write(self._format_mtgsuomi(card[0],
+                                                    card[1],
+                                                    card[2],
+                                                    card[3]))
 
         input_file.close()
         output_file.close()
