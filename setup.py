@@ -15,7 +15,7 @@ setup(
         'ipdb==0.8',
         'ipython==2.1.0',
         'lxml==3.3.5',
-        'urllib3==1.8.2',
+        'urllib3==1.26.5',
     ],
     license='BSD License',  # example license
     description='Api for searching cards from MagicCardMarket',
