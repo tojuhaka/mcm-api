@@ -13,7 +13,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'ipdb==0.8',
-        'ipython==2.1.0',
+        'ipython==7.16.3',
         'lxml==3.3.5',
         'urllib3==1.8.2',
     ],
