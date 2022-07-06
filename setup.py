@@ -14,7 +14,7 @@ setup(
     install_requires=[
         'ipdb==0.8',
         'ipython==2.1.0',
-        'lxml==3.3.5',
+        'lxml==4.9.1',
         'urllib3==1.8.2',
     ],
     license='BSD License',  # example license
